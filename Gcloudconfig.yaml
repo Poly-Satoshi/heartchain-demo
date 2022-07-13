@@ -1,0 +1,5 @@
+(Test-Path $env:CLOUDSDK_CONFIG/config_sentinel) {
+        $ACTIVE_CONFIG = Get-Content $env:CLOUDSDK_CONFIG/active_config
+        Get-Content "$env:CLOUDSDK_CONFIG/configurations/config_$ACTIVE_CONFIG" | foreach-object -begin {$h=@{}} -process { $k = [regex]::split($_,'='); if(($k[0].CompareTo("") -ne 0) -and ($k[0].StartsWith("[") -ne $True)) { $h.Add($k[0].trim(), $k[1].trim()) } }
+        $env:DEVSHELL_PROJECT_ID=$h.Get_Item("project")
+        $env:GOOGLE_CLOUD_PROJECT=$h.Get_Item("project")
